@@ -52,3 +52,7 @@ app.put("/completed",async (req,res)=>{
     msg:"Todo marked a completed",
    })
 })
+
+app.listen(3000,()=>{
+    console.log("Server is running on port http://localhost:3000");
+})
