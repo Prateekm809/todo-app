@@ -2,11 +2,12 @@ const express = require("express")
 const app = express();
 const { createTodo } = require("./types")
 const { updateTodo } = require("./types")
+const { todo } = require("./db");
+
+
 app.use(express.json);
 
-
-
-app.post("/todo", (req,res)=>{
+app.post("/todo",async (req,res)=>{
 const createBody = req.body;
 const parseBody = createTodo.safeParse(createBody);
 if (!parseBody.success){
@@ -15,13 +16,25 @@ if (!parseBody.success){
     })
     return;
 }
+//put this into mongodb
+    await todo.create({
+        title: createBody.title,
+        description: createBody.description,
+        completed: false
+    })
+    res.json({
+        msg:"Todo created successfully",
+    })
 })
 
-app.get("/todos",(req, res)=>{
-    
+app.get("/todos",async (req, res)=>{
+    const todos = await todo.find({});
+    res.json({
+        todos
+    })
 })
 
-app.put("/completed",(req,res)=>{
+app.put("/completed",async (req,res)=>{
     const updateBody = req.body;
     const parseBody = updateTodo.safeParse(updateBody);
     if(!parseBody.success){
@@ -30,5 +43,12 @@ app.put("/completed",(req,res)=>{
         })
        return;
     }
-    return
+   await todo.update({
+    _id: req.body.id
+   },{
+    completed: true
+   })
+   res.json({
+    msg:"Todo marked a completed",
+   })
 })
