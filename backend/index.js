@@ -5,7 +5,7 @@ const { updateTodo } = require("./types")
 const { todo } = require("./db");
 
 
-app.use(express.json);
+app.use(express.json());
 
 app.post("/todo",async (req,res)=>{
 const createBody = req.body;
@@ -43,7 +43,7 @@ app.put("/completed",async (req,res)=>{
         })
        return;
     }
-   await todo.update({
+   await todo.updateOne({
     _id: req.body.id
    },{
     completed: true
@@ -53,6 +53,6 @@ app.put("/completed",async (req,res)=>{
    })
 })
 
-app.listen(3000,()=>{
-    console.log("Server is running on port http://localhost:3000");
+app.listen(4000,()=>{
+    console.log("Server is running on port http://localhost:4000");
 })
